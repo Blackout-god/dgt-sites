@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+**/.next
+**/out
+**/.wrangler
+**/.dev.vars
+.npm-cache
+.data
+.git
+tmp
+apps/storefront/public/media
+apps/storefront/src/generated
+*.pdf
+output/

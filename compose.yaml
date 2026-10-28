@@ -1,0 +1,66 @@
+name: inkatoys
+x-app: &app
+  image: inkatoys-local:dev
+  working_dir: /app
+  volumes:
+    - .:/app
+    - dependencies:/app/node_modules
+  environment: &app-environment
+    NEXT_TELEMETRY_DISABLED: "1"
+    WRANGLER_SEND_METRICS: "false"
+services:
+  prepare:
+    <<: *app
+    build: .
+    environment:
+      <<: *app-environment
+      FEED_URL: ${FEED_URL:-https://dream-group-toys.com.ua/export_xml_dgt/five_brands.xml}
+      FEED_FILE: ${FEED_FILE:-}
+    command: sh -c "node scripts/install-if-needed.mjs && npm run setup:local && npm run prepare:data"
+  hub:
+    <<: *app
+    command: sh -c "npm run migrate:local --workspace @dream/hub && npm run dev:hub"
+    ports:
+      - "127.0.0.1:8787:8787"
+    volumes:
+      - .:/app
+      - dependencies:/app/node_modules
+      - hub-state:/app/apps/hub/.wrangler
+    depends_on:
+      prepare:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8787/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 4s
+      retries: 15
+      start_period: 15s
+  seed:
+    <<: *app
+    command: npm run seed:hub
+    environment:
+      HUB_INTERNAL_URL: http://hub:8787
+    depends_on:
+      hub:
+        condition: service_healthy
+  web:
+    <<: *app
+    command: sh -c "npm run sync:hub && npm run dev"
+    environment:
+      NEXT_TELEMETRY_DISABLED: "1"
+      NEXT_PUBLIC_HUB_URL: http://localhost:8787
+      HUB_INTERNAL_URL: http://hub:8787
+      WATCHPACK_POLLING: "1000"
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - .:/app
+      - dependencies:/app/node_modules
+      - next-webpack-cache:/app/apps/storefront/.next
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+volumes:
+  dependencies:
+  hub-state:
+  next-webpack-cache:

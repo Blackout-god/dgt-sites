@@ -1,0 +1,33 @@
+{
+  "name": "dream-group-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "prepare:data": "tsx scripts/prepare-data.ts",
+    "dev": "npm run dev --workspace @dream/storefront",
+    "dev:hub": "npm run dev --workspace @dream/hub",
+    "setup:local": "tsx scripts/setup-local.ts",
+    "seed:hub": "tsx scripts/seed-hub.ts",
+    "sync:hub": "tsx scripts/sync-hub.ts",
+    "build:hub": "npm run sync:hub && npm run build",
+    "verify:local": "tsx scripts/verify-local.ts",
+    "build": "npm run build --workspace @dream/storefront",
+    "build:demo": "node scripts/build-demo.mjs",
+    "typecheck": "tsc --noEmit -p apps/hub/tsconfig.json && npm run typecheck --workspace @dream/storefront",
+    "test": "tsx --test packages/catalog/test/*.test.ts apps/hub/test/*.test.ts scripts/test/*.test.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "latest",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "sharp": "^0.35.5",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}

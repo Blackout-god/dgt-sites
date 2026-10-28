@@ -1,0 +1,14 @@
+import { readFile, mkdir, writeFile, rename } from 'node:fs/promises';
+import type { Snapshot } from '@dream/catalog';
+const vars=await readFile('apps/hub/.dev.vars','utf8');
+const token=vars.match(/^ADMIN_TOKEN="(.+)"$/m)?.[1];
+if(!token)throw new Error('Local build token missing. Run setup:local.');
+const base=process.env.HUB_INTERNAL_URL||'http://127.0.0.1:8787';
+const response=await fetch(`${base}/internal/build`,{headers:{Authorization:`Bearer ${token}`}});
+if(!response.ok)throw new Error(`Hub snapshot unavailable: ${response.status}`);
+const snapshot:Snapshot=await response.json();
+if(!snapshot.products.length)throw new Error('Hub catalog is empty. Run seed:hub.');
+await mkdir('apps/storefront/src/generated',{recursive:true});
+await writeFile('apps/storefront/src/generated/catalog.json.tmp',JSON.stringify(snapshot));
+await rename('apps/storefront/src/generated/catalog.json.tmp','apps/storefront/src/generated/catalog.json');
+console.log(`Build data: ${snapshot.products.length} ${snapshot.brand} products from hub D1.`);

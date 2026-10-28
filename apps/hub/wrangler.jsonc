@@ -1,0 +1,10 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "dream-group-hub",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [{"binding":"DB","database_name":"dream-hub","database_id":"00000000-0000-0000-0000-000000000001","migrations_dir":"migrations"}],
+  "r2_buckets": [{"binding":"MEDIA","bucket_name":"dream-group-media"}],
+  "vars": {"ALLOWED_ORIGINS":"http://localhost:3000,http://127.0.0.1:3000", "BRAND":"INKATOYS"}
+}

@@ -1,0 +1,9 @@
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { isLocale } from '@/config/brand';
+import { getProduct } from '@/lib/catalog';
+import { t } from '@/lib/i18n';
+import { pageMetadata } from '@/lib/seo';
+import { ArrowUpRight, Flower } from '@/components/icons';
+export async function generateMetadata({params}:{params:Promise<{locale:string}>}){const {locale}=await params;return isLocale(locale)?pageMetadata(locale,'about',t(locale).about,t(locale).aboutDescription):{};}
+export default async function About({params}:{params:Promise<{locale:string}>}){const {locale}=await params;if(!isLocale(locale))notFound();const d=t(locale);return <main id="main" className="wrap content-page"><section className="about-layout"><div><span className="eyebrow">HELLO, WE ARE INKATOYS</span><h1>{d.aboutHeading}</h1><p>{d.aboutDescription}</p><p>{locale==='uk'?'Ми віримо, що для обіймів не потрібен особливий привід. Нехай він просто буде поруч — кумедний котик, спокійна капібара чи ведмедик, якому можна довірити день.':'We believe a hug needs no special occasion. Sometimes you just want a funny cat, a calm capybara or a bear to share your day with.'}</p><Link href={`/${locale}/catalog/`} className="button button-dark">{d.explore}<ArrowUpRight size={18}/></Link></div><div className="about-art"><Flower/>{getProduct('96030')?.images[0]&&<img src={getProduct('96030')!.images[0].src} alt="Котик Руді" width="700" height="700"/>}<span className="handwritten">nice to meet you ♡</span></div></section><div className="about-bottom"><span className="eyebrow">DREAM GROUP TOYS · INKATOYS</span><h2>{locale==='uk'?'Історії починаються з маленького друга.':'Big stories start with a little friend.'}</h2><Link className="text-link" href={`/${locale}/partners/`}>{d.partnerCta}<ArrowUpRight size={18}/></Link></div></main>;}

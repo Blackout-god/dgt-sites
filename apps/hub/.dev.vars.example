@@ -1,0 +1,3 @@
+LOCAL_DEVELOPMENT="true"
+# setup:local generates a random local ADMIN_TOKEN in the ignored .dev.vars.
+# Production must use Cloudflare Access + Turnstile and a configured mail provider.

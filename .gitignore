@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+.wrangler/
+.npm-cache/
+.data/
+.env*
+!.env.example
+.dev.vars*
+!.dev.vars.example
+apps/storefront/public/media/
+apps/storefront/src/generated/
+*.tsbuildinfo
+*.log
+tmp/
+/output/
+/ТЗ для разработчика_ хаб данных и B2B-витрины брендов Dream Group Toys.pdf

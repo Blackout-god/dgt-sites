@@ -1,0 +1,6 @@
+{
+  "name": "@dream/hub", "version": "0.1.0", "private": true, "type": "module",
+  "scripts": {"dev": "wrangler dev --ip 0.0.0.0 --port 8787", "migrate:local": "wrangler d1 migrations apply dream-hub --local"},
+  "dependencies": {"@dream/catalog": "*", "hono": "^4.0.0", "fflate": "^0.8.2"},
+  "devDependencies": {"wrangler": "latest"}
+}

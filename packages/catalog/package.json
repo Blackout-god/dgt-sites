@@ -1,0 +1,9 @@
+{
+  "name": "@dream/catalog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {".": "./src/index.ts"},
+  "dependencies": {"fast-xml-parser": "^5.0.0", "he": "^1.2.0"},
+  "devDependencies": {"@types/he": "^1.2.3"}
+}
